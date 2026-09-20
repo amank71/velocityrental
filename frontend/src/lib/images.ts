@@ -20,8 +20,8 @@ import cbr1000rrImage from "@/assets/cbr1000rr.jpg";
 import streetTripleImage from "@/assets/street_triple.jpg";
 import z900Image from "@/assets/z900.jpg";
 import guerrillaImage from "@/assets/guerrilla.jpg";
-import speed400Image from "@/assets/speed400.jpg";
-import scramblerImage from "@/assets/scrambler.jpg";
+import speed400Image from "@/assets/speed400.png";
+import scramblerImage from "@/assets/scrambler.png";
 
 export function getVehicleImage(make, model, type) {
   const m = (model || '').toLowerCase();
