@@ -1,0 +1,1 @@
+UPDATE users SET password_hash = 'scrypt$16384$8$1$c0c0f8d3a7b5960ee14f651f2b1f3849$35cb764eddaff258e616bb7fee468f50d793457818348486bbc575711c2220b5cfa716521602f234831429734e4692846085b8861c494b749502c4bdec4b68b7' WHERE email IN ('admin@rental.test', 'aarav@rental.test', 'priya@rental.test');
