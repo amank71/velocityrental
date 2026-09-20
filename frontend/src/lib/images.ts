@@ -19,6 +19,12 @@ import ninjaImage from "@/assets/ninja.jpg";
 export function getVehicleImage(make, model, type) {
   const m = (model || '').toLowerCase();
   
+  // Custom external images for the latest bikes
+  if (m.includes('cbr')) return "https://images.unsplash.com/photo-1568772585407-9361f9bf3c87?auto=format&fit=crop&w=800&q=80";
+  if (m.includes('z900') || m.includes('street')) return "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80";
+  if (m.includes('speed')) return "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&w=800&q=80";
+  if (m.includes('scrambler') || m.includes('guerrilla')) return "https://images.unsplash.com/photo-1552308995-2baac1ad5490?auto=format&fit=crop&w=800&q=80";
+
   // Cars
   if (m.includes('swift')) return swiftImage;
   if (m.includes('creta')) return cretaImage;
@@ -32,13 +38,13 @@ export function getVehicleImage(make, model, type) {
   if (m.includes('fortuner')) return fortunerImage;
 
   // Bikes & Scooters
-  if (m.includes('himalayan') || m.includes('scrambler')) return himalayanImage;
+  if (m.includes('himalayan')) return himalayanImage;
   if (m.includes('adv') || m.includes('390')) return adv390Image;
-  if (m.includes('classic') || m.includes('speed')) return classic350Image;
+  if (m.includes('classic')) return classic350Image;
   if (m.includes('pulsar')) return pulsar150Image;
   if (m.includes('activa')) return activaImage;
-  if (m.includes('ronin') || m.includes('guerrilla')) return roninImage;
-  if (m.includes('ninja') || m.includes('cbr') || m.includes('z900') || m.includes('street')) return ninjaImage;
+  if (m.includes('ronin')) return roninImage;
+  if (m.includes('ninja')) return ninjaImage;
 
   // Fallbacks
   return type === 'bike' ? pulsar150Image : cityImage;
