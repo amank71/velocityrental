@@ -7,6 +7,7 @@ import tharImage from "@/assets/thar.jpg";
 import gurkhaImage from "@/assets/gurkha.jpg";
 import jimnyImage from "@/assets/jimny.jpg";
 import himalayanImage from "@/assets/himalayan.jpg";
+import himalayan411Image from "@/assets/himalayan411.jpg";
 import adv390Image from "@/assets/adv390.jpg";
 import classic350Image from "@/assets/classic350.jpg";
 import pulsar150Image from "@/assets/pulsar150.jpg";
@@ -15,15 +16,25 @@ import roninImage from "@/assets/ronin.jpg";
 import scorpioImage from "@/assets/scorpio.jpg";
 import fortunerImage from "@/assets/fortuner.jpg";
 import ninjaImage from "@/assets/ninja.jpg";
+import cbr1000rrImage from "@/assets/cbr1000rr.jpg";
+import streetTripleImage from "@/assets/street_triple.jpg";
+import z900Image from "@/assets/z900.jpg";
+import guerrillaImage from "@/assets/guerrilla.jpg";
 
 export function getVehicleImage(make, model, type) {
   const m = (model || '').toLowerCase();
   
-  // Custom external images for the latest bikes
-  if (m.includes('cbr')) return "https://images.unsplash.com/photo-1568772585407-9361f9bf3c87?auto=format&fit=crop&w=800&q=80";
-  if (m.includes('z900') || m.includes('street')) return "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80";
+  // Explicit matches for the user's requested bikes
+  if (m.includes('411')) return himalayan411Image;
+  if (m.includes('450') && m.includes('himalayan')) return himalayanImage;
+  if (m.includes('cbr')) return cbr1000rrImage;
+  if (m.includes('z900')) return z900Image;
+  if (m.includes('street')) return streetTripleImage;
+  if (m.includes('guerrilla')) return guerrillaImage;
+  
+  // Custom external images for the ones missing from Wiki
   if (m.includes('speed')) return "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&w=800&q=80";
-  if (m.includes('scrambler') || m.includes('guerrilla')) return "https://images.unsplash.com/photo-1552308995-2baac1ad5490?auto=format&fit=crop&w=800&q=80";
+  if (m.includes('scrambler')) return "https://images.unsplash.com/photo-1552308995-2baac1ad5490?auto=format&fit=crop&w=800&q=80";
 
   // Cars
   if (m.includes('swift')) return swiftImage;
