@@ -32,13 +32,13 @@ export function getVehicleImage(make, model, type) {
   if (m.includes('fortuner')) return fortunerImage;
 
   // Bikes & Scooters
-  if (m.includes('himalayan')) return himalayanImage;
+  if (m.includes('himalayan') || m.includes('scrambler')) return himalayanImage;
   if (m.includes('adv') || m.includes('390')) return adv390Image;
-  if (m.includes('classic')) return classic350Image;
+  if (m.includes('classic') || m.includes('speed')) return classic350Image;
   if (m.includes('pulsar')) return pulsar150Image;
   if (m.includes('activa')) return activaImage;
-  if (m.includes('ronin')) return roninImage;
-  if (m.includes('ninja')) return ninjaImage;
+  if (m.includes('ronin') || m.includes('guerrilla')) return roninImage;
+  if (m.includes('ninja') || m.includes('cbr') || m.includes('z900') || m.includes('street')) return ninjaImage;
 
   // Fallbacks
   return type === 'bike' ? pulsar150Image : cityImage;
