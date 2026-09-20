@@ -2,8 +2,14 @@ import swiftImage from "@/assets/swift.jpg";
 import cretaImage from "@/assets/creta.jpg";
 import cityImage from "@/assets/city.jpg";
 import innovaImage from "@/assets/innova.jpg";
+import altoImage from "@/assets/alto.jpg";
+import tharImage from "@/assets/thar.jpg";
+import gurkhaImage from "@/assets/gurkha.jpg";
+import jimnyImage from "@/assets/jimny.jpg";
+import himalayanImage from "@/assets/himalayan.jpg";
+import adv390Image from "@/assets/adv390.jpg";
 
-export type VehicleType = "hatchback" | "suv" | "sedan" | "muv";
+export type VehicleType = "hatchback" | "suv" | "sedan" | "muv" | "bike";
 export type VehicleStatus = "available" | "maintenance";
 
 export type Vehicle = {

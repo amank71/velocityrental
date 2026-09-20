@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, CalendarDays, CreditCard, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/rental-data";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({ meta: [{ title: "My Bookings - Velocity Fleet" }] }),
@@ -67,7 +68,7 @@ function BookingsPage(){
                 <p className="text-xs text-muted-foreground">Booking total</p>
                 <p className="mt-1 text-2xl font-semibold text-ink">{formatCurrency(b.total_amount)}</p>
                 <p className="mt-1 text-xs text-muted-foreground">Paid {formatCurrency(b.amount_paid)}</p>
-                <Button variant="outline" className="mt-4 border-line bg-transparent text-ink hover:bg-paper">View details</Button>
+                <Button variant="outline" className="mt-4 border-line bg-transparent text-ink hover:bg-paper" onClick={() => toast.info(`Booking ${b.booking_id} detailed view coming soon.`)}>View details</Button>
               </div>
             </div>
           </article>
