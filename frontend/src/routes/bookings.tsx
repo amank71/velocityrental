@@ -23,7 +23,7 @@ function BookingsPage(){
     }
     setUser(JSON.parse(userStr));
 
-    fetch("http://localhost:5000/api/bookings", {
+    fetch((import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/bookings", {
       headers: { "Authorization": `Bearer ${token}` }
     })
     .then(r => r.json())

@@ -23,13 +23,13 @@ function AdminPage(){
 
   function loadData() {
     if (!token) return;
-    fetch("http://localhost:5000/api/admin/stats", { headers: { "Authorization": `Bearer ${token}` }})
+    fetch((import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/admin/stats", { headers: { "Authorization": `Bearer ${token}` }})
       .then(r => r.json()).then(data => setStats(data.stats)).catch(console.error);
 
-    fetch("http://localhost:5000/api/bookings", { headers: { "Authorization": `Bearer ${token}` }})
+    fetch((import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/bookings", { headers: { "Authorization": `Bearer ${token}` }})
       .then(r => r.json()).then(data => setBookings(data.bookings || [])).catch(console.error);
 
-    fetch("http://localhost:5000/api/vehicles", { headers: { "Authorization": `Bearer ${token}` }})
+    fetch((import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/vehicles", { headers: { "Authorization": `Bearer ${token}` }})
       .then(r => r.json()).then(data => setVehicles(data.vehicles || [])).catch(console.error);
   }
 
@@ -59,7 +59,7 @@ function AdminPage(){
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/vehicles", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/vehicles", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ function AdminPage(){
   async function handleDeleteVehicle(vehicleId: number) {
     if (!confirm("Are you sure you want to delete this vehicle?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/vehicles/${vehicleId}`, {
+      const res = await fetch(`\${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/vehicles/${vehicleId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

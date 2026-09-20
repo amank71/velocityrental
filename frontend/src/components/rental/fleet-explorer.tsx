@@ -22,7 +22,8 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/vehicles", {
+    const url = (import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/vehicles";
+    fetch(url, {
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("velocity-token")}` }
     })
     .then(r => r.json())
@@ -49,7 +50,8 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
     const user = JSON.parse(userStr);
 
     try {
-      const res = await fetch("http://localhost:5000/api/bookings", {
+      const url = (import.meta.env.VITE_API_URL || "http://localhost:5000") + "/api/bookings";
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
