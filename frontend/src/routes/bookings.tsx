@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, CreditCard, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/rental-data";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({ meta: [{ title: "My Bookings - Velocity Fleet" }] }),
@@ -31,6 +32,36 @@ function BookingsPage(){
     .then(data => setBookings(data.bookings || []))
     .catch(console.error);
   }, [navigate]);
+
+  const generateInvoice = (b: any) => {
+    
+    const doc = new jsPDF();
+    doc.setFontSize(22);
+    doc.text("Velocity Fleet - Invoice", 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Invoice ID: #INV-00${b.booking_id}`, 20, 35);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
+    doc.text(`Customer Name: ${user.name}`, 20, 49);
+    doc.line(20, 55, 190, 55);
+    doc.setFontSize(16);
+    doc.text("Booking Details", 20, 65);
+    doc.setFontSize(12);
+    doc.text(`Vehicle: ${b.make} ${b.model} (${b.registration_number})`, 20, 75);
+    doc.text(`Pickup Date: ${new Date(b.start_date).toLocaleDateString()}`, 20, 82);
+    doc.text(`Return Date: ${new Date(b.end_date).toLocaleDateString()}`, 20, 89);
+    doc.text(`Status: ${b.booking_status.toUpperCase()}`, 20, 96);
+    doc.line(20, 105, 190, 105);
+    doc.setFontSize(16);
+    doc.text("Payment Summary", 20, 115);
+    doc.setFontSize(12);
+    doc.text(`Total Amount: Rs. ${b.total_amount}`, 20, 125);
+    doc.text(`Tax (18% included): Rs. ${(b.total_amount * 0.18).toFixed(2)}`, 20, 132);
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text("Thank you for choosing Velocity Fleet!", 20, 150);
+    doc.save(`velocity_invoice_${b.booking_id}.pdf`);
+    toast.success("Invoice PDF Downloaded!");
+  };
 
   if (!user) return null;
 
@@ -64,11 +95,13 @@ function BookingsPage(){
                   <span className="flex items-center gap-2"><CreditCard className="size-4 text-brand" />{b.payment_status}</span>
                 </div>
               </div>
-              <div className="sm:text-right">
+              <div className="text-right">
                 <p className="text-xs text-muted-foreground">Booking total</p>
                 <p className="mt-1 text-2xl font-semibold text-ink">{formatCurrency(b.total_amount)}</p>
                 <p className="mt-1 text-xs text-muted-foreground">Paid {formatCurrency(b.amount_paid)}</p>
-                <Button variant="outline" className="mt-4 border-line bg-transparent text-ink hover:bg-paper" onClick={() => toast.info(`Booking ${b.booking_id} detailed view coming soon.`)}>View details</Button>
+                <Button variant="outline" className="mt-4 border-line bg-brand/10 text-brand hover:bg-brand hover:text-brand-ink" onClick={() => generateInvoice(b)}>
+                  <CreditCard className="mr-2 size-4" /> Download Invoice
+                </Button>
               </div>
             </div>
           </article>

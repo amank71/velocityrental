@@ -91,10 +91,21 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   return (
     <>
       {!compact && (
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div><p className="eyebrow">(A) Live availability</p><h2 className="mt-2 font-display text-3xl text-ink sm:text-4xl">Browse the fleet</h2><p className="mt-2 text-sm text-muted-foreground">Delhi NCR • transparent rates • basic insurance included</p></div>
-          <div className="flex flex-wrap gap-2" aria-label="Vehicle category filters">
-            {categories.map((item) => <Button key={item.value} variant="outline" onClick={() => setCategory(item.value)} className={category === item.value ? "border-ink bg-ink text-paper hover:bg-ink hover:text-paper" : "border-line bg-transparent text-muted-foreground hover:border-brand hover:bg-panel hover:text-ink"}>{item.label}</Button>)}
+        <div className="mb-8 flex flex-col gap-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div><p className="eyebrow">(A) Live availability</p><h2 className="mt-2 font-display text-3xl text-ink sm:text-4xl">Browse the fleet</h2><p className="mt-2 text-sm text-muted-foreground">Delhi NCR • transparent rates • basic insurance included</p></div>
+            <div className="flex flex-wrap gap-2" aria-label="Vehicle category filters">
+              {categories.map((item) => <Button key={item.value} variant="outline" onClick={() => setCategory(item.value)} className={category === item.value ? "border-ink bg-ink text-paper hover:bg-ink hover:text-paper" : "border-line bg-transparent text-muted-foreground hover:border-brand hover:bg-panel hover:text-ink"}>{item.label}</Button>)}
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="flex-1">
+              <Input placeholder="Search models (e.g. Scorpio, Triumph)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="max-w-md bg-panel border-line text-ink" />
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">Max Price: {formatCurrency(maxPrice)}/day</span>
+              <input type="range" min="500" max="10000" step="500" value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="accent-brand" />
+            </div>
           </div>
         </div>
       )}

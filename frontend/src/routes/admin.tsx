@@ -5,6 +5,7 @@ import { formatCurrency } from "@/lib/rental-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Legend, Cell } from "recharts";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Fleet Operations - Velocity Fleet" }] }),
@@ -118,7 +119,42 @@ function AdminPage(){
         return <div key={String(label)} className="rounded-card border border-line bg-panel p-5"><C className="size-5 text-brand"/><p className="mt-5 text-xs text-muted-foreground">{String(label)}</p><p className="mt-1 text-2xl font-semibold text-ink">{String(value)}</p></div>
       })}
     </div>
-    <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <section className="rounded-card border border-line bg-panel p-5">
+          <h2 className="text-lg font-semibold text-ink">Fleet Composition</h2>
+          <div className="mt-4 h-[250px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={[
+                  { name: 'Available', value: Number(stats?.availableVehicles) || 0, fill: '#14b8a6' },
+                  { name: 'Rented', value: Number(stats?.rentedVehicles) || 0, fill: '#f59e0b' },
+                  { name: 'Maintenance', value: Number(stats?.maintenanceVehicles) || 0, fill: '#ef4444' }
+                ]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5}>
+                </Pie>
+                <Tooltip contentStyle={{ backgroundColor: '#111110', border: '1px solid #272725' }} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+        <section className="rounded-card border border-line bg-panel p-5">
+          <h2 className="text-lg font-semibold text-ink">Recent Revenue</h2>
+          <div className="mt-4 h-[250px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={[
+                { name: 'Total Revenue', amount: Number(stats?.revenue) || 0 },
+                { name: 'Due Payments', amount: Number(stats?.dueBookings) * 1000 || 0 }
+              ]}>
+                <XAxis dataKey="name" stroke="#878785" fontSize={12} />
+                <YAxis stroke="#878785" fontSize={12} />
+                <Tooltip contentStyle={{ backgroundColor: '#111110', border: '1px solid #272725', borderRadius: '8px' }} cursor={{ fill: '#272725' }} />
+                <Bar dataKey="amount" fill="#d4ff26" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+      </div>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
       <section className="overflow-hidden rounded-card border border-line bg-panel">
         <div className="border-b border-line p-5"><p className="eyebrow">Active & upcoming</p><h2 className="mt-1 text-lg font-semibold text-ink">Booking queue</h2></div>
         <div className="overflow-x-auto">
