@@ -20,6 +20,8 @@ import cbr1000rrImage from "@/assets/cbr1000rr.jpg";
 import streetTripleImage from "@/assets/street_triple.jpg";
 import z900Image from "@/assets/z900.jpg";
 import guerrillaImage from "@/assets/guerrilla.jpg";
+import speed400Image from "@/assets/speed400.jpg";
+import scramblerImage from "@/assets/scrambler.jpg";
 
 export function getVehicleImage(make, model, type) {
   const m = (model || '').toLowerCase();
@@ -31,10 +33,8 @@ export function getVehicleImage(make, model, type) {
   if (m.includes('z900')) return z900Image;
   if (m.includes('street')) return streetTripleImage;
   if (m.includes('guerrilla')) return guerrillaImage;
-  
-  // Custom external images for the ones missing from Wiki
-  if (m.includes('speed')) return "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?auto=format&fit=crop&w=800&q=80";
-  if (m.includes('scrambler')) return "https://images.unsplash.com/photo-1552308995-2baac1ad5490?auto=format&fit=crop&w=800&q=80";
+  if (m.includes('speed')) return speed400Image;
+  if (m.includes('scrambler')) return scramblerImage;
 
   // Cars
   if (m.includes('swift')) return swiftImage;
