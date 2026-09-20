@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input";
 import { formatCurrency, rentalDays } from "@/lib/rental-data";
 import { getVehicleImage } from "@/lib/images";
+import { PaymentModal } from "./payment-modal";
 
 const categories: Array<{ value: string; label: string }> = [
   { value: "all", label: "All" }, { value: "suv", label: "SUV" }, { value: "sedan", label: "Sedan" }, { value: "hatchback", label: "Hatch" }, { value: "bike", label: "Bike" }
@@ -18,6 +19,7 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   const [startDate, setStartDate] = useState(initialStart);
   const [endDate, setEndDate] = useState(initialEnd);
   const [submitted, setSubmitted] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [error, setError] = useState("");
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,15 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   const days = rentalDays(startDate, endDate);
   const visible = useMemo(() => vehicles.filter((vehicle) => category === "all" || vehicle.vehicle_type === category), [category, vehicles]);
 
-  async function confirmBooking(formData: FormData) {
+  function confirmBooking(formData: FormData) {
+    if (!selected || days === 0) { setError("Please choose a valid return date."); return; }
+    const token = sessionStorage.getItem("velocity-token");
+    if (!token) { setError("Please sign in to confirm your booking."); return; }
+    setError("");
+    setShowPayment(true);
+  }
+
+  async function processBooking() {
     if (!selected || days === 0) { setError("Please choose a valid return date."); return; }
     
     const token = sessionStorage.getItem("velocity-token");
@@ -111,7 +121,7 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
           {selected && !submitted && <><DialogHeader><p className="eyebrow">Reserve your ride</p><DialogTitle className="font-display text-3xl">{selected.make} {selected.model}</DialogTitle><DialogDescription className="text-muted-foreground">Complete the details below.</DialogDescription></DialogHeader><div className="grid gap-6 md:grid-cols-[1fr_1.1fr]"><img src={getVehicleImage(selected.make, selected.model, selected.vehicle_type)} alt={`${selected.make} ${selected.model}`} width={944} height={704} className="aspect-[4/3] w-full rounded-card object-cover" /><form action={confirmBooking} className="space-y-4"><div className="grid grid-cols-2 gap-3"><label className="field-label">Pickup date<Input name="start" type="date" value={startDate} min="2026-09-21" onChange={(event) => setStartDate(event.target.value)} className="field-input" /></label><label className="field-label">Return date<Input name="end" type="date" value={endDate} min={startDate} onChange={(event) => setEndDate(event.target.value)} className="field-input" /></label></div><div className="rounded-brand border border-line bg-paper p-3 text-sm"><div className="flex justify-between text-muted-foreground"><span>{days || 0} day{days === 1 ? "" : "s"} * {formatCurrency(selected.daily_rate)}</span><span className="text-ink">{formatCurrency(selected.daily_rate * days)}</span></div><div className="mt-2 flex justify-between border-t border-line pt-2 font-semibold"><span>Total</span><span className="text-brand">{formatCurrency(selected.daily_rate * days)}</span></div></div>{error && <p role="alert" className="text-sm text-danger">{error}</p>}<Button type="submit" className="w-full bg-brand text-brand-ink hover:bg-brand/90">Confirm reservation</Button></form></div></>}
           {selected && submitted && <div className="py-8 text-center"><span className="mx-auto grid size-14 place-items-center rounded-full bg-ok/15 text-ok"><Check className="size-7" /></span><p className="eyebrow mt-5">Booking confirmed</p><DialogTitle className="mt-2 font-display text-4xl">READY TO ROLL</DialogTitle><DialogDescription className="mx-auto mt-3 max-w-md text-muted-foreground">Your {selected.make} {selected.model} is reserved. Open My Bookings to view your reservation.</DialogDescription><div className="mx-auto mt-6 grid max-w-sm grid-cols-2 gap-3 text-left"><div className="rounded-brand border border-line bg-paper p-3"><CalendarDays className="mb-2 size-4 text-brand" /><p className="text-xs text-muted-foreground">Rental period</p><p className="mt-1 text-sm">{startDate} - {endDate}</p></div><div className="rounded-brand border border-line bg-paper p-3"><MapPin className="mb-2 size-4 text-brand" /><p className="text-xs text-muted-foreground">Pickup hub</p><p className="mt-1 text-sm">Connaught Place</p></div></div><Button onClick={() => setSelected(null)} className="mt-6 bg-brand text-brand-ink hover:bg-brand/90">Done</Button></div>}
         </DialogContent>
-      </Dialog>
+      </Dialog><PaymentModal open={showPayment} onOpenChange={setShowPayment} amount={(selected?.daily_rate || 0) * days} onSuccess={processBooking} />
     </>
   );
 }
