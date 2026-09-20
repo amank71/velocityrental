@@ -4,7 +4,7 @@ import { ArrowRight, CalendarDays, CreditCard, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/rental-data";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({ meta: [{ title: "My Bookings - Velocity Fleet" }] }),
@@ -34,33 +34,48 @@ function BookingsPage(){
   }, [navigate]);
 
   const generateInvoice = (b: any) => {
-    
-    const doc = new jsPDF();
-    doc.setFontSize(22);
-    doc.text("Velocity Fleet - Invoice", 20, 20);
-    doc.setFontSize(12);
-    doc.text(`Invoice ID: #INV-00${b.booking_id}`, 20, 35);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
-    doc.text(`Customer Name: ${user.name}`, 20, 49);
-    doc.line(20, 55, 190, 55);
-    doc.setFontSize(16);
-    doc.text("Booking Details", 20, 65);
-    doc.setFontSize(12);
-    doc.text(`Vehicle: ${b.make} ${b.model} (${b.registration_number})`, 20, 75);
-    doc.text(`Pickup Date: ${new Date(b.start_date).toLocaleDateString()}`, 20, 82);
-    doc.text(`Return Date: ${new Date(b.end_date).toLocaleDateString()}`, 20, 89);
-    doc.text(`Status: ${b.booking_status.toUpperCase()}`, 20, 96);
-    doc.line(20, 105, 190, 105);
-    doc.setFontSize(16);
-    doc.text("Payment Summary", 20, 115);
-    doc.setFontSize(12);
-    doc.text(`Total Amount: Rs. ${b.total_amount}`, 20, 125);
-    doc.text(`Tax (18% included): Rs. ${(b.total_amount * 0.18).toFixed(2)}`, 20, 132);
-    doc.setFontSize(10);
-    doc.setTextColor(150);
-    doc.text("Thank you for choosing Velocity Fleet!", 20, 150);
-    doc.save(`velocity_invoice_${b.booking_id}.pdf`);
-    toast.success("Invoice PDF Downloaded!");
+    const invoiceHTML = `
+      <html>
+        <head>
+          <title>Invoice - ${b.booking_id}</title>
+          <style>
+            body { font-family: sans-serif; padding: 40px; color: #111; }
+            h1 { color: #facc15; }
+            .details { margin-top: 20px; line-height: 1.6; }
+            .line { border-bottom: 1px solid #ddd; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <h1>Velocity Fleet</h1>
+          <h2>Booking Invoice #${b.booking_id}</h2>
+          <div class="line"></div>
+          <div class="details">
+            <p><strong>Customer:</strong> ${user.name}</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+            <p><strong>Vehicle:</strong> ${b.make} ${b.model} (${b.registration_number})</p>
+            <p><strong>Rental Period:</strong> ${new Date(b.start_date).toLocaleDateString()} to ${new Date(b.end_date).toLocaleDateString()}</p>
+            <p><strong>Status:</strong> ${b.booking_status.toUpperCase()}</p>
+          </div>
+          <div class="line"></div>
+          <div class="details">
+            <h3>Payment Summary</h3>
+            <p><strong>Total Amount:</strong> Rs. ${b.total_amount}</p>
+            <p><strong>Tax (18% included):</strong> Rs. ${(b.total_amount * 0.18).toFixed(2)}</p>
+          </div>
+          <div class="line"></div>
+          <p style="color: #666; font-size: 14px;">Thank you for choosing Velocity Fleet!</p>
+          <script>
+            window.onload = () => { window.print(); window.close(); }
+          </script>
+        </body>
+      </html>
+    `;
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      printWindow.document.write(invoiceHTML);
+      printWindow.document.close();
+    }
+    toast.success("Invoice generated!");
   };
 
   if (!user) return null;

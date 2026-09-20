@@ -20,6 +20,8 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   const [endDate, setEndDate] = useState(initialEnd);
   const [submitted, setSubmitted] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [maxPrice, setMaxPrice] = useState(10000);
   const [error, setError] = useState("");
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,12 @@ export function FleetExplorer({ compact = false, initialStart = "", initialEnd =
   }, []);
 
   const days = rentalDays(startDate, endDate);
-  const visible = useMemo(() => vehicles.filter((vehicle) => category === "all" || vehicle.vehicle_type === category), [category, vehicles]);
+  const visible = useMemo(() => vehicles.filter((v) => {
+    const matchesCategory = category === "all" || v.vehicle_type === category;
+    const matchesSearch = v.make.toLowerCase().includes(searchQuery.toLowerCase()) || v.model.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPrice = Number(v.daily_rate) <= maxPrice;
+    return matchesCategory && matchesSearch && matchesPrice;
+  }), [category, vehicles, searchQuery, maxPrice]);
 
   function confirmBooking(formData: FormData) {
     if (!selected || days === 0) { setError("Please choose a valid return date."); return; }
