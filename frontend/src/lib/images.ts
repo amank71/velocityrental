@@ -22,6 +22,7 @@ import z900Image from "@/assets/z900.jpg";
 import guerrillaImage from "@/assets/guerrilla.jpg";
 import speed400Image from "@/assets/speed400.png";
 import scramblerImage from "@/assets/scrambler.png";
+import hiluxImage from "@/assets/hilux.jpg";
 
 export function getVehicleImage(make, model, type) {
   const m = (model || '').toLowerCase();
