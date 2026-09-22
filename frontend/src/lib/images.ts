@@ -1,4 +1,4 @@
-﻿import swiftImage from "@/assets/swift.jpg";
+import swiftImage from "@/assets/swift.jpg";
 import cretaImage from "@/assets/creta.jpg";
 import cityImage from "@/assets/city.jpg";
 import innovaImage from "@/assets/innova.jpg";
@@ -47,6 +47,7 @@ export function getVehicleImage(make, model, type) {
   if (m.includes('jimny')) return jimnyImage;
   if (m.includes('scorpio')) return scorpioImage;
   if (m.includes('fortuner')) return fortunerImage;
+  if (m.includes('hilux')) return hiluxImage;
 
   // Bikes & Scooters
   if (m.includes('himalayan')) return himalayanImage;
